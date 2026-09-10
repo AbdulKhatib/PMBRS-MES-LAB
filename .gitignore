@@ -3,3 +3,5 @@ __pycache__/
 .env
 *.log
 config.py
+deployment/deployment.log
+deployment/*.backup
