@@ -26,6 +26,14 @@ if errorlevel 1 (
     goto :end
 )
 
+
+copy /Y "C:\PMBRS\application\config.py" "C:\inetpub\wwwroot\pmbrs\config.py" >nul
+if errorlevel 1 (
+    echo [FAIL] Could not copy config.py >> %LOGFILE%
+    set SCRIPT_STATUS=1
+    goto :end
+)
+
 echo [PASS] Files deployed >> %LOGFILE%
 
 %windir%\system32\inetsrv\appcmd.exe recycle apppool /apppool.name:"PMBRS"
