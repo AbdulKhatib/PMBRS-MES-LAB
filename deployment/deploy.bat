@@ -6,10 +6,18 @@ set LOGFILE=C:\PMBRS\deployment\deployment.log
 echo ===== DEPLOY STAGE ===== >> %LOGFILE%
 echo %date% %time% - Starting deployment >> %LOGFILE%
 
-REM Backup current live version before overwriting
+REM Backup current live version before overwriting - all three deployable files
 if exist "C:\inetpub\wwwroot\pmbrs\app.py" (
     copy "C:\inetpub\wwwroot\pmbrs\app.py" "C:\PMBRS\deployment\app.py.backup" >nul
     echo [INFO] Previous app.py backed up >> %LOGFILE%
+)
+if exist "C:\inetpub\wwwroot\pmbrs\web.config" (
+    copy "C:\inetpub\wwwroot\pmbrs\web.config" "C:\PMBRS\deployment\web.config.backup" >nul
+    echo [INFO] Previous web.config backed up >> %LOGFILE%
+)
+if exist "C:\inetpub\wwwroot\pmbrs\config.py" (
+    copy "C:\inetpub\wwwroot\pmbrs\config.py" "C:\PMBRS\deployment\config.py.backup" >nul
+    echo [INFO] Previous config.py backed up >> %LOGFILE%
 )
 
 copy /Y "C:\PMBRS\application\app.py" "C:\inetpub\wwwroot\pmbrs\app.py" >nul
