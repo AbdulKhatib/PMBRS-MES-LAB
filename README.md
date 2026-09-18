@@ -6,6 +6,8 @@ PMBRS is a fictional pharmaceutical manufacturing web application, built the way
 
 > This is not a validated GxP production system. It's a controlled engineering lab applying validation-inspired discipline (requirements, testing, traceability, evidence) to a small, real, three-tier application — see [`docs/architecture.md`](docs/architecture.md) for scope.
 
+**Start here:** [Final Case Study](docs/final-case-study.md) — the full accounting of what was built, what broke, and what was deliberately left undone.
+
 ---
 
 ## Architecture
@@ -34,7 +36,8 @@ Two-tier, two-EC2-instance deployment, security-group-segmented, with no public 
 - ✅ **Gated CI/CD pipeline** — `BUILD → TEST → DEPLOY → VERIFY`, with explicit exit-code handling at every stage, not just printed status text
 - ✅ **Automatic rollback** — a failed VERIFY triggers automatic restoration of the previous working version, independently re-verified before being reported as recovered
 - ✅ **Tested disaster recovery** — a real EBS snapshot-and-restore was performed and verified, with measured RPO/RTO, not just documented as a plan
-- ✅ **Nine real, documented incidents** — see [`/testing`](testing/) and [`/docs`](docs/) — genuine root-cause analyses, not staged failures
+- ✅ **Ten real, documented incidents** — see [`/testing`](testing/) and [`/docs`](docs/) — genuine root-cause analyses, not staged failures
+- ✅ **Formal test plan** — 33 tests across 6 categories, honestly recorded results (not a manufactured 100% pass rate) — see [`testing/test-plan.md`](testing/test-plan.md) and [`testing/test-results.md`](testing/test-results.md)
 
 ## Real Incidents, Honestly Documented
 
@@ -50,8 +53,9 @@ This project intentionally breaks things and documents what happens, because tha
 | Pipeline false failure | `findstr` pattern assumed JSON spacing Flask doesn't produce |
 | DEPLOY stage silent gap | A config file was never added to the deployment script's copy list |
 | Bad code deploy | Verified the pipeline correctly detects and auto-rolls-back a syntax error that earlier stages couldn't catch |
+| Plaintext credential in public history | A real DB password was committed in an `IDENTIFIED BY` clause, missed by a `findstr "password"` check that didn't match Oracle's syntax; found during a full-history audit and resolved by rotation |
 
-Full writeups: [`testing/incident-001.md`](testing/incident-001.md), [`testing/incident-002.md`](testing/incident-002.md), and the incident sections inside [`docs/database-build.md`](docs/database-build.md), [`docs/iis-build.md`](docs/iis-build.md), and [`docs/cicd-pipeline.md`](docs/cicd-pipeline.md).
+Full writeups: [`testing/incident-001.md`](testing/incident-001.md), [`testing/incident-002.md`](testing/incident-002.md), [`testing/incident-003.md`](testing/incident-003.md), and the incident sections inside [`docs/database-build.md`](docs/database-build.md), [`docs/iis-build.md`](docs/iis-build.md), and [`docs/cicd-pipeline.md`](docs/cicd-pipeline.md).
 
 ## Repository Structure
 
@@ -67,6 +71,7 @@ PMBRS-MES-LAB/
 
 ## Documentation Index
 
+- [Final Case Study](docs/final-case-study.md) — the capstone summary: what was built, what broke, what was deliberately left undone
 - [Architecture](docs/architecture.md) — topology, design decisions, instance sizing
 - [Dependency Matrix](docs/dependency-matrix.md) — security group rules, real values
 - [Database Build](docs/database-build.md) — Oracle install, schema, incidents
@@ -74,6 +79,9 @@ PMBRS-MES-LAB/
 - [CI/CD Pipeline](docs/cicd-pipeline.md) — pipeline design, incidents
 - [Rollback Plan](docs/rollback-plan.md) — automated rollback design, RPO/RTO
 - [DR Plan](docs/DR-plan.md) — tested backup/restore, measured RPO/RTO
+- [Azure Service Mapping](docs/azure-service-mapping.md) — AWS-to-Azure conceptual mapping (Stage 10)
+- [Test Plan](testing/test-plan.md) — formal requirement-to-test mapping
+- [Test Results](testing/test-results.md) — results for every test, including honestly-recorded gaps
 - [API Reference](application/API.md) — endpoint documentation
 
 ## Why This Project Exists
